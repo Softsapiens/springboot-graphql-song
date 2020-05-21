@@ -1,0 +1,30 @@
+type Query {
+    hello(who: String): String!
+    people: [Person!]!
+
+    bookById(id: ID): Book
+}
+
+type Book {
+    id: ID
+    name: String
+    pageCount: Int
+    author: Author
+}
+
+type Author {
+    id: ID
+    firstName: String
+    lastName: String
+}
+
+type Mutation {
+    createPerson(firstName: String!, lastName: String!): Person!
+}
+
+type Person {
+    id: Int!
+    firstName: String!
+    lastName: String!
+    fullName: String!
+}
