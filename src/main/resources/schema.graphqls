@@ -3,6 +3,8 @@ type Query {
     people: [Person!]!
 
     bookById(id: ID): Book
+    bookByIdFuture(id: ID): Book
+    bookByIdMono(id: ID): Book
 }
 
 type Book {

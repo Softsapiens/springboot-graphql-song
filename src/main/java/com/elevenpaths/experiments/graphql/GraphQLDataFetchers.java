@@ -2,13 +2,19 @@ package com.elevenpaths.experiments.graphql;
 
 import com.google.common.collect.ImmutableMap;
 import graphql.schema.DataFetcher;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 @Component
+@Slf4j
 public class GraphQLDataFetchers {
 
     private static List<Map<String, String>> books = Arrays.asList(
@@ -38,7 +44,34 @@ public class GraphQLDataFetchers {
                     "lastName", "Rice")
     );
 
-    public DataFetcher getBookByIdDataFetcher() {
+    public DataFetcher<Future<Map<String, String>>> getBookByIdFuture() {
+        return dataFetchingEnvironment -> {
+            String bookId = dataFetchingEnvironment.getArgument("id");
+
+            dataFetchingEnvironment.getSelectionSet().getFields().forEach(f -> {
+                log.info("Field [{}]", f.getName());
+            });
+
+            return Mono.just(books
+                    .stream()
+                    .filter(book -> book.get("id").equals(bookId))
+                    .findFirst()
+                    .orElse(null)).toFuture();
+        };
+    }
+
+    public DataFetcher<Mono<Map<String, String>>> getBookByIdMono() {
+        return dataFetchingEnvironment -> {
+            String bookId = dataFetchingEnvironment.getArgument("id");
+            return Mono.just(books
+                    .stream()
+                    .filter(book -> book.get("id").equals(bookId))
+                    .findFirst()
+                    .orElse(null));
+        };
+    }
+
+    public DataFetcher<Map<String, String>> getBookByIdDataFetcher() {
         return dataFetchingEnvironment -> {
             String bookId = dataFetchingEnvironment.getArgument("id");
             return books

@@ -1,6 +1,7 @@
 package com.elevenpaths.experiments.graphql;
 
 import graphql.GraphQL;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
@@ -10,12 +11,14 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 @EnableAutoConfiguration
+@Slf4j
 public class SongApp {
 
     @Autowired
     GraphQL graphql;
 
     public static void main(String[] args) {
+
         SpringApplication.run(SongApp.class, args);
     }
 }
