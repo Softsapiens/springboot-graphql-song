@@ -60,6 +60,23 @@ public class GraphQLDataFetchers {
         };
     }
 
+    public DataFetcher<Future<Map<String, String>>> getSearchDataFetcher() {
+        return dataFetchingEnvironment -> {
+
+            String bookId = dataFetchingEnvironment.getArgument("context");
+
+            dataFetchingEnvironment.getSelectionSet().getFields().forEach(f -> {
+                log.info("Field [{}]", f.getName());
+            });
+
+            return Mono.just(books
+                    .stream()
+                    .filter(book -> book.get("id").equals(bookId))
+                    .findFirst()
+                    .orElse(null)).toFuture();
+        };
+    }
+
     public DataFetcher<Mono<Map<String, String>>> getBookByIdMono() {
         return dataFetchingEnvironment -> {
             String bookId = dataFetchingEnvironment.getArgument("id");

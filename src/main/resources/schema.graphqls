@@ -1,14 +1,52 @@
 type Query {
     hello(who: String): String!
-    people: [Person!]!
 
     bookById(id: ID): Book
     bookByIdFuture(id: ID): Book
     bookByIdMono(id: ID): Book
+
+
+    search(context: String, fields: [NField]!, filter: NFilter, limit: Int, Offset: Int, sort: [NSort]): NSearchResult
+
+}
+
+input NField {
+    name: String
+    source: String!
+}
+
+input NFilter {
+    condition: NFilterCondition
+    and: [NFilter]
+    or: [NFilter]
+    not: [NFilter]
+}
+
+input NFilterCondition {
+    contains: NFilterValue
+    eq: NFilterValue
+    in: NFilterValue
+    isblank: NFilterValue
+    isnull: NFilterValue
+    range: NFilterValue
+    regexp: NFilterValue
+}
+
+input NFilterValue {
+    value: String!
+}
+
+input NSort {
+    attribute: String!
+}
+
+type NSearchResult {
+    took: Int
+
 }
 
 type Book {
-    id: ID
+    id: ID!
     name: String
     pageCount: Int
     author: Author
@@ -20,13 +58,3 @@ type Author {
     lastName: String
 }
 
-type Mutation {
-    createPerson(firstName: String!, lastName: String!): Person!
-}
-
-type Person {
-    id: Int!
-    firstName: String!
-    lastName: String!
-    fullName: String!
-}
