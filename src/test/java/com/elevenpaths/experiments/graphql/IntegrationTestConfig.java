@@ -1,19 +1,12 @@
 package com.elevenpaths.experiments.graphql;
 
 import graphql.GraphQL;
-import org.mockito.Mockito;
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Configuration;
 
-@SpringBootApplication
+@Configuration
 public class IntegrationTestConfig {
 
-
-    @Bean
-    public GraphQL graphQL() {
-        return Mockito.mock(GraphQL.class);
-    }
-
+    @MockBean
+    public GraphQL graphQL;
 }
