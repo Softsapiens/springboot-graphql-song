@@ -1,50 +1,19 @@
 package com.elevenpaths.experiments.graphql;
 
-import com.google.common.collect.ImmutableMap;
+import com.elevenpaths.experiments.neith.Model.*;
 import graphql.schema.DataFetcher;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.concurrent.Future;
 
 @Component
 @Slf4j
 public class GraphQLDataFetchers {
 
-    private static List<Map<String, String>> books = Arrays.asList(
-            ImmutableMap.of("id", "book-1",
-                    "name", "Harry Potter and the Philosopher's Stone",
-                    "pageCount", "223",
-                    "authorId", "author-1"),
-            ImmutableMap.of("id", "book-2",
-                    "name", "Moby Dick",
-                    "pageCount", "635",
-                    "authorId", "author-2"),
-            ImmutableMap.of("id", "book-3",
-                    "name", "Interview with the vampire",
-                    "pageCount", "371",
-                    "authorId", "author-3")
-    );
-
-    private static List<Map<String, String>> authors = Arrays.asList(
-            ImmutableMap.of("id", "author-1",
-                    "firstName", "Joanne",
-                    "lastName", "Rowling"),
-            ImmutableMap.of("id", "author-2",
-                    "firstName", "Herman",
-                    "lastName", "Melville"),
-            ImmutableMap.of("id", "author-3",
-                    "firstName", "Anne",
-                    "lastName", "Rice")
-    );
-
-    public DataFetcher<Future<Map<String, String>>> getBookByIdFuture() {
+    public DataFetcher<Future<Book>> getBookByIdDataFetcher() {
         return dataFetchingEnvironment -> {
             String bookId = dataFetchingEnvironment.getArgument("id");
 
@@ -52,62 +21,38 @@ public class GraphQLDataFetchers {
                 log.info("Field [{}]", f.getName());
             });
 
-            return Mono.just(books
-                    .stream()
-                    .filter(book -> book.get("id").equals(bookId))
-                    .findFirst()
-                    .orElse(null)).toFuture();
+            Author author = new Author();
+            author.setId("author-1");
+            author.setFirstName("John");
+            author.setLastName("Foo");
+            Book book = new Book();
+            book.setId(bookId);
+            book.setName("GraphQL song");
+            book.setPageCount(666);
+            book.setAuthor(author);
+
+            return Mono.just(book).toFuture();
         };
     }
 
-    public DataFetcher<Future<Map<String, String>>> getSearchDataFetcher() {
+    public DataFetcher<Future<NSearchResult>> getSearchDataFetcher() {
         return dataFetchingEnvironment -> {
 
-            String bookId = dataFetchingEnvironment.getArgument("context");
+            String context = dataFetchingEnvironment.getArgument("context");
+            ArrayList<String> fields = dataFetchingEnvironment.getArgument("fields");
 
             dataFetchingEnvironment.getSelectionSet().getFields().forEach(f -> {
                 log.info("Field [{}]", f.getName());
             });
 
-            return Mono.just(books
-                    .stream()
-                    .filter(book -> book.get("id").equals(bookId))
-                    .findFirst()
-                    .orElse(null)).toFuture();
-        };
-    }
+            dataFetchingEnvironment.getArguments().entrySet().forEach(entry -> {
+                log.info("Field [{}][{} => {}]", entry.getKey(), entry.getValue().getClass().getCanonicalName(),entry.getValue());
+            });
 
-    public DataFetcher<Mono<Map<String, String>>> getBookByIdMono() {
-        return dataFetchingEnvironment -> {
-            String bookId = dataFetchingEnvironment.getArgument("id");
-            return Mono.just(books
-                    .stream()
-                    .filter(book -> book.get("id").equals(bookId))
-                    .findFirst()
-                    .orElse(null));
-        };
-    }
+            NSearchResult ns = new NSearchResult();
+            ns.setTook(100);
 
-    public DataFetcher<Map<String, String>> getBookByIdDataFetcher() {
-        return dataFetchingEnvironment -> {
-            String bookId = dataFetchingEnvironment.getArgument("id");
-            return books
-                    .stream()
-                    .filter(book -> book.get("id").equals(bookId))
-                    .findFirst()
-                    .orElse(null);
-        };
-    }
-
-    public DataFetcher getAuthorDataFetcher() {
-        return dataFetchingEnvironment -> {
-            Map<String, String> book = dataFetchingEnvironment.getSource();
-            String authorId = book.get("authorId");
-            return authors
-                    .stream()
-                    .filter(author -> author.get("id").equals(authorId))
-                    .findFirst()
-                    .orElse(null);
+            return Mono.just(ns).toFuture();
         };
     }
 }

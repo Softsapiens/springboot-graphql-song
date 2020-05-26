@@ -1,12 +1,8 @@
 type Query {
     hello(who: String): String!
-
     bookById(id: ID): Book
-    bookByIdFuture(id: ID): Book
-    bookByIdMono(id: ID): Book
 
-
-    search(context: String, fields: [NField]!, filter: NFilter, limit: Int, Offset: Int, sort: [NSort]): NSearchResult
+    search(context: String, fields: [NField!]!, filter: NFilter, limit: Int, offset: Int, sort: [NSort]): NSearchResult
 
 }
 
@@ -42,7 +38,7 @@ input NSort {
 
 type NSearchResult {
     took: Int
-
+    data: [String!]!
 }
 
 type Book {
