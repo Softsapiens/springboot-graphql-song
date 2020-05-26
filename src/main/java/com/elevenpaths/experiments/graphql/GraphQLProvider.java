@@ -8,19 +8,26 @@ import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 import static graphql.schema.idl.TypeRuntimeWiring.newTypeWiring;
 
 @Component
+@Slf4j
 public class GraphQLProvider {
 
     private GraphQL graphQL;
+
+    @Autowired
+    List<Resolver> resolvers;
 
     @PostConstruct
     public void init() throws IOException {
@@ -36,20 +43,23 @@ public class GraphQLProvider {
         TypeDefinitionRegistry typeRegistry = new SchemaParser().parse(sdl);
         RuntimeWiring runtimeWiring = buildWiring();
         SchemaGenerator schemaGenerator = new SchemaGenerator();
+
         return schemaGenerator.makeExecutableSchema(typeRegistry, runtimeWiring);
     }
 
     private RuntimeWiring buildWiring() {
 
-        com.elevenpaths.experiments.graphql.mss.DataFetchers mss = new com.elevenpaths.experiments.graphql.mss.DataFetchers();
-        com.elevenpaths.experiments.graphql.books.DataFetchers books = new com.elevenpaths.experiments.graphql.books.DataFetchers();
+        RuntimeWiring.Builder rt = RuntimeWiring.newRuntimeWiring();
 
-        return RuntimeWiring.newRuntimeWiring()
-                .type(newTypeWiring("Query")
-                        .dataFetcher("bookById", books.getBookByIdDataFetcher()))
-                .type(newTypeWiring("Query")
-                        .dataFetcher("search_tickets", mss.getSearchDataFetcher()))
-                .build();
+        resolvers.forEach(resolver -> {
+            log.info("Processing resolver [{}][{}]", resolver.getTypeName(), resolver.getFieldName());
+
+            rt
+                    .type(newTypeWiring(resolver.getTypeName())
+                    .dataFetcher(resolver.getFieldName(), resolver.getResolver()));
+        });
+
+        return rt.build();
     }
 
     @Bean

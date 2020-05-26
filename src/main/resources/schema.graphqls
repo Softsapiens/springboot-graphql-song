@@ -14,6 +14,11 @@ type TicketResult {
     category: String
     priority: Int
     description: String
+    events: [Event!]!
+}
+
+type Event {
+    id: ID!
 }
 
 input NField {
@@ -45,6 +50,11 @@ input NFilterValue {
 input NSort {
     attribute: String!
 }
+
+
+
+
+
 
 type Book {
     id: ID!

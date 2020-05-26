@@ -1,8 +1,10 @@
 package com.elevenpaths.experiments.graphql.mss;
 
+import com.elevenpaths.experiments.graphql.Resolver;
 import com.elevenpaths.experiments.graphql.mss.Model.*;
 import graphql.schema.DataFetcher;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -10,10 +12,21 @@ import java.util.ArrayList;
 import java.util.concurrent.Future;
 
 @Slf4j
-@Component
-public final class DataFetchers {
+@Component("TicketResolver")
+public final class DataFetchers implements Resolver {
 
-    public DataFetcher<Future<TicketSearchResult>> getSearchDataFetcher() {
+    @Override
+    public String getTypeName() {
+        return "Query";
+    }
+
+    @Override
+    public String getFieldName() {
+        return "search_tickets";
+    }
+
+    @Override
+    public DataFetcher<Future<TicketSearchResult>> getResolver() {
         return dataFetchingEnvironment -> {
 
             String context = dataFetchingEnvironment.getArgument("context");
@@ -33,6 +46,7 @@ public final class DataFetchers {
             tr.setCategory("CAT-1");
             tr.setDescription("This is a foo description");
             tr.setTicketId("ticket-1");
+            tr.setPriority(1);
             sr.getItems().add(tr);
 
             return Mono.just(sr).toFuture();

@@ -1,16 +1,30 @@
 package com.elevenpaths.experiments.graphql.books;
 
 import com.elevenpaths.experiments.books.Model.*;
+import com.elevenpaths.experiments.graphql.Resolver;
 import graphql.schema.DataFetcher;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import java.util.concurrent.Future;
 
 @Slf4j
-public class DataFetchers {
+@Component("BookResolver")
+public class DataFetchers implements Resolver {
 
-    public DataFetcher<Future<Book>> getBookByIdDataFetcher() {
+    @Override
+    public String getTypeName() {
+        return "Query";
+    }
+
+    @Override
+    public String getFieldName() {
+        return "bookById";
+    }
+
+    @Override
+    public DataFetcher<Future<Book>> getResolver() {
         return dataFetchingEnvironment -> {
             String bookId = dataFetchingEnvironment.getArgument("id");
 

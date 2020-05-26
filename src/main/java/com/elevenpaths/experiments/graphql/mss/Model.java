@@ -35,5 +35,9 @@ public class Model {
         @Getter
         @Setter
         String description;
+
+        @Getter
+        @Setter
+        Integer priority;
     }
 }
