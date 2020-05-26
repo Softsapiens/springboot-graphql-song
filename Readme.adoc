@@ -6,6 +6,10 @@
 An experiment using a link:https://graphql.org[GraphQL] backend in Java link:https://spring.io[Spring] exposing a generic searchable/aggregable API.
 Apart from learning purposes, the goal is to evaluate the graphql state-of-art in Java with required features as _look-ahead_ and _dataloader_ optimizations.
 
+== Development Guide
+
+Some development docs link:./docs/dev-guide.adoc[here].
+
 == Warm & Run
 
 ```bash

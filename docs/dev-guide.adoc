@@ -1,0 +1,115 @@
+= Development Guide
+:toc:
+:toclevels: 3
+
+== Abstract
+
+Some tips about Java GraphQL development using Spring-Boot.
+
+== Queries
+
+In order to get graphql queries to work a _root_ query must be defined in resource _schema.graphql_.
+Then a link://[Resolver] instance for that request must be proportioned.
+
+```java
+public interface Resolver {
+    public String getTypeName();
+    public String getFieldName();
+    public DataFetcher<?> getResolver();
+}
+```
+
+For example, with the following schema:
+
+```
+type Query {
+    bookById(id: ID): Book
+}
+
+type Book {
+    id: ID!
+    name: String
+    pageCount: Int
+    author: Author
+}
+
+type Author {
+    id: ID
+    firstName: String
+    lastName: String
+}
+```
+
+And defining its _Resolver_:
+
+```java
+public class Resolvers implements Resolver {
+
+    @Override
+    public String getTypeName() {
+        return "Query";
+    }
+
+    @Override
+    public String getFieldName() {
+        return "bookById";
+    }
+
+    @Override
+    public DataFetcher<Future<Book>> getResolver() {
+        return dataFetchingEnvironment -> {
+            Author author = new Author();
+            author.setId("author-1");
+            author.setFirstName("John");
+            author.setLastName("Foo");
+            Book book = new Book();
+            book.setId(bookId);
+            book.setName("GraphQL song");
+            book.setPageCount(666);
+            book.setAuthor(author);
+
+            return Mono.just(book).toFuture();
+        };
+    }
+}
+```
+
+Finally expose the model, and link:https://projectlombok.org/[lombok] may remove boilerplate.
+
+```java
+@Data
+    public static class Author {
+        @Getter
+        @Setter
+        String id;
+
+        @Getter
+        @Setter
+        String firstName;
+
+        @Getter
+        @Setter
+        String lastName;
+    }
+
+    @Data
+    public static class Book {
+        @Getter
+        @Setter
+        String id;
+
+        @Getter
+        @Setter
+        String name;
+
+        @Getter
+        @Setter
+        Integer pageCount;
+
+        @Getter
+        @Setter
+        Author author;
+    }
+```
+
+Get it up and running. Enjoy it!
