@@ -1,10 +1,9 @@
 package com.elevenpaths.experiments.graphql.mss;
 
-import com.elevenpaths.experiments.graphql.Resolver;
+import com.elevenpaths.experiments.graphql.core.Resolver;
 import com.elevenpaths.experiments.graphql.mss.Model.*;
 import graphql.schema.DataFetcher;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 

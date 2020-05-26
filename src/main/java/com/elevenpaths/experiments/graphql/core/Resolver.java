@@ -1,4 +1,4 @@
-package com.elevenpaths.experiments.graphql;
+package com.elevenpaths.experiments.graphql.core;
 
 import graphql.schema.DataFetcher;
 

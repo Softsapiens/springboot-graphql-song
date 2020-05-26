@@ -1,7 +1,7 @@
 package com.elevenpaths.experiments.graphql.books;
 
-import com.elevenpaths.experiments.books.Model.*;
-import com.elevenpaths.experiments.graphql.Resolver;
+import com.elevenpaths.experiments.graphql.books.Model.*;
+import com.elevenpaths.experiments.graphql.core.Resolver;
 import graphql.schema.DataFetcher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

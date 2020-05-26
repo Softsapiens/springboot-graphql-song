@@ -1,4 +1,4 @@
-package com.elevenpaths.experiments.books;
+package com.elevenpaths.experiments.graphql.books;
 
 import lombok.Data;
 import lombok.Getter;

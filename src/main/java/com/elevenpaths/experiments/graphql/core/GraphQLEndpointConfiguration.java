@@ -1,4 +1,4 @@
-package com.elevenpaths.experiments.graphql;
+package com.elevenpaths.experiments.graphql.core;
 
 import graphql.spring.web.reactive.components.GraphQLController;
 import org.springframework.beans.factory.annotation.Autowired;
