@@ -12,7 +12,7 @@ import java.util.concurrent.Future;
 
 @Slf4j
 @Component("TicketResolver")
-public final class DataFetchers implements Resolver {
+public final class Resolvers implements Resolver {
 
     @Override
     public String getTypeName() {

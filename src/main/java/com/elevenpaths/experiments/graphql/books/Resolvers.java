@@ -11,7 +11,7 @@ import java.util.concurrent.Future;
 
 @Slf4j
 @Component("BookResolver")
-public class DataFetchers implements Resolver {
+public class Resolvers implements Resolver {
 
     @Override
     public String getTypeName() {
