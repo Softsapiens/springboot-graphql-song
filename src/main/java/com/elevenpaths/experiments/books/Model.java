@@ -1,17 +1,10 @@
-package com.elevenpaths.experiments.neith;
+package com.elevenpaths.experiments.books;
 
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 public class Model {
-
-    @Data
-    public static class NSearchResult {
-        @Getter
-        @Setter
-        Integer took;
-    }
 
     @Data
     public static class Author {

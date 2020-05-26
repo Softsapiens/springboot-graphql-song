@@ -1,9 +1,19 @@
 type Query {
-    hello(who: String): String!
     bookById(id: ID): Book
 
-    search(context: String, fields: [NField!]!, filter: NFilter, limit: Int, offset: Int, sort: [NSort]): NSearchResult
+    search_tickets(context: String, filter: NFilter, limit: Int, offset: Int, sort: [NSort]): TicketSearchResult
+}
 
+type TicketSearchResult {
+    took: Int
+    items: [TicketResult]
+}
+
+type TicketResult {
+    ticketId: ID
+    category: String
+    priority: Int
+    description: String
 }
 
 input NField {
@@ -34,11 +44,6 @@ input NFilterValue {
 
 input NSort {
     attribute: String!
-}
-
-type NSearchResult {
-    took: Int
-    data: [String!]!
 }
 
 type Book {

@@ -8,7 +8,6 @@ import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -20,9 +19,6 @@ import static graphql.schema.idl.TypeRuntimeWiring.newTypeWiring;
 
 @Component
 public class GraphQLProvider {
-
-    @Autowired
-    GraphQLDataFetchers graphQLDataFetchers;
 
     private GraphQL graphQL;
 
@@ -44,13 +40,15 @@ public class GraphQLProvider {
     }
 
     private RuntimeWiring buildWiring() {
+
+        com.elevenpaths.experiments.graphql.mss.DataFetchers mss = new com.elevenpaths.experiments.graphql.mss.DataFetchers();
+        com.elevenpaths.experiments.graphql.books.DataFetchers books = new com.elevenpaths.experiments.graphql.books.DataFetchers();
+
         return RuntimeWiring.newRuntimeWiring()
                 .type(newTypeWiring("Query")
-                        .dataFetcher("bookById", graphQLDataFetchers.getBookByIdDataFetcher()))
-//                .type(newTypeWiring("Book")
-//                        .dataFetcher("author", graphQLDataFetchers.getAuthorDataFetcher()))
+                        .dataFetcher("bookById", books.getBookByIdDataFetcher()))
                 .type(newTypeWiring("Query")
-                        .dataFetcher("search", graphQLDataFetchers.getSearchDataFetcher()))
+                        .dataFetcher("search_tickets", mss.getSearchDataFetcher()))
                 .build();
     }
 
