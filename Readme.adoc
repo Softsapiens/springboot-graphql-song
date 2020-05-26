@@ -1,6 +1,8 @@
 = springboot-graphql-song
 :toc:
 
+image:https://github.com/Softsapiens/springboot-graphql-song/workflows/Java%20CI/badge.svg[]
+
 == Abstract
 
 An experiment using a link:https://graphql.org[GraphQL] backend in Java link:https://spring.io[Spring] exposing a generic searchable/aggregable API.
