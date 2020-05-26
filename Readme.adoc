@@ -1,0 +1,26 @@
+= springboot-graphql-song
+:toc:
+
+== Abstract
+
+An experiment using a link:https://graphql.org[GraphQL] backend in Java link:https://spring.io[Spring] exposing a generic searchable/aggregable API.
+Apart from learning purposes, the goal is to evaluate the graphql state-of-art in Java with required features as _look-ahead_ and _dataloader_ optimizations.
+
+== Warm & Run
+
+```bash
+mvn compile
+mvn test
+
+mvn spring-boot:run
+```
+
+== Requests
+
+Some requests examples are link:./insomnia/insomnia-data.json[here]
+
+== Tech Stack
+
+- Java
+- Spring-Boot
+- link:https://www.graphql-java.com[graphql-java]
