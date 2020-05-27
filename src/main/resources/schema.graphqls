@@ -3,15 +3,35 @@ type Query {
     bookByAuthor(author_id: ID!): Book
     bookBy(id: ID, author_i: ID): Book
 
-    search_tickets(context: String, filter: NFilter, limit: Int, offset: Int, sort: [NSort]): TicketSearchResult
+    viewer: Session
 
-    aggregate_tickets(context: String, filter: NFilter, limit: Int, offset: Int, sort: [NSort]): TicketSearchResult
+
+    search_tickets(context: JSON, filter: NFilter, limit: Int, offset: Int, sort: [NSort]): TicketSearchResult
+    aggregate_tickets(context: JSON, filter: NFilter, limit: Int, offset: Int, sort: [NSort]): TicketSearchResult
 }
 
 type Mutation {
     createAuthor(name: String!): Author
 
     createBook(name: String!, pageCount: Int!, author_id: ID!): Book
+}
+
+scalar DateTime
+scalar Email
+scalar Object
+scalar JSON
+
+
+type Session {
+    id: ID!
+    user: User!
+    ts: DateTime
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: Email!
 }
 
 type TicketSearchResult {

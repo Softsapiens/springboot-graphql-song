@@ -3,6 +3,8 @@ package com.elevenpaths.experiments.graphql.core;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import graphql.GraphQL;
+import graphql.scalars.ExtendedScalars;
+import graphql.scalars.regex.RegexScalar;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
@@ -17,6 +19,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static graphql.schema.idl.TypeRuntimeWiring.newTypeWiring;
 
@@ -58,6 +61,17 @@ public class GraphQLProvider {
                     .type(newTypeWiring(resolver.getTypeName())
                     .dataFetcher(resolver.getFieldName(), resolver.getResolver()));
         });
+
+        // Scalars
+        rt.scalar(ExtendedScalars.DateTime);
+        rt.scalar(ExtendedScalars.Json);
+        rt.scalar(ExtendedScalars.Object);
+
+        RegexScalar emailScalar = ExtendedScalars.newRegexScalar("Email")
+                .addPattern(Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"))
+                .build();
+
+        rt.scalar(emailScalar);
 
         return rt.build();
     }

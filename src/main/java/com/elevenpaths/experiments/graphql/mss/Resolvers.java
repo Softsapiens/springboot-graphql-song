@@ -2,10 +2,7 @@ package com.elevenpaths.experiments.graphql.mss;
 
 import com.elevenpaths.experiments.graphql.core.Resolver;
 import com.elevenpaths.experiments.graphql.mss.Model.*;
-import graphql.ErrorClassification;
-import graphql.ErrorType;
-import graphql.GraphQLError;
-import graphql.GraphqlErrorBuilder;
+import graphql.*;
 import graphql.execution.DataFetcherResult;
 import graphql.execution.ExecutionId;
 import graphql.schema.DataFetcher;
@@ -14,6 +11,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.concurrent.Future;
 
 import static graphql.execution.DataFetcherResult.newResult;
@@ -50,6 +48,14 @@ public final class Resolvers implements Resolver {
             });
 
             DataFetcherResult.Builder<TicketSearchResult> r = DataFetcherResult.newResult();
+
+            Optional.<GraphQLContext.Builder>ofNullable(env.getContext()).ifPresentOrElse(c -> {
+                GraphQLContext contxt = c.build();
+
+                contxt.stream().forEach(e -> {
+                    log.info("ExecutionId [{}] Resolver context [{}][{}]", id, e.getKey(), e.getValue());
+                });
+            }, () -> { log.info("ExecutionId [{}] Resolver context EMPTY"); });
 
             TicketSearchResult sr = new TicketSearchResult();
 
