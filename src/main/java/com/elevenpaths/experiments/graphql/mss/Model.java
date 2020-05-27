@@ -16,7 +16,7 @@ public class Model {
 
         @Getter
         @Setter
-        Integer took;
+        MetaResult meta;
 
         @Getter
         ArrayList<TicketResult> items;
@@ -39,5 +39,16 @@ public class Model {
         @Getter
         @Setter
         Integer priority;
+    }
+
+    @Data
+    public static class MetaResult {
+        @Getter
+        @Setter
+        Integer took;
+
+        @Getter
+        @Setter
+        Integer hits;
     }
 }

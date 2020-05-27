@@ -1,16 +1,31 @@
 type Query {
-    bookById(id: ID): Book
+    bookById(id: ID!): Book
+    bookByAuthor(author_id: ID!): Book
+    bookBy(id: ID, author_i: ID): Book
 
     search_tickets(context: String, filter: NFilter, limit: Int, offset: Int, sort: [NSort]): TicketSearchResult
+
+    aggregate_tickets(context: String, filter: NFilter, limit: Int, offset: Int, sort: [NSort]): TicketSearchResult
+}
+
+type Mutation {
+    createAuthor(name: String!): Author
+
+    createBook(name: String!, pageCount: Int!, author_id: ID!): Book
 }
 
 type TicketSearchResult {
-    took: Int
+    meta: MetaResult
     items: [TicketResult]
 }
 
+type MetaResult {
+    took: Int
+    hits: Int
+}
+
 type TicketResult {
-    ticketId: ID
+    ticketId: ID!
     category: String
     priority: Int
     description: String
@@ -64,7 +79,7 @@ type Book {
 }
 
 type Author {
-    id: ID
+    id: ID!
     firstName: String
     lastName: String
 }
