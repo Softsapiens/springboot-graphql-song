@@ -21,6 +21,33 @@ mvn test
 mvn spring-boot:run
 ```
 
+=== Dockerize
+
+By executing:
+[source,bash]
+```
+mvn package
+```
+
+A docker image named _springboot-graphql-song_ and tagged with current commit time and commit id abbreviated, for examples:
+
+```
+$ docker images
+REPOSITORY                  TAG                           IMAGE ID            CREATED             SIZE
+springboot-graphql-song     2020-05-28T17-23-36.1f4f5d6   a6d8cce143aa        9 minutes ago       430MB
+```
+
+Finally an instance could be started by:
+
+```
+docker run -ti --rm --name graphql-song -p 8080:8080 springboot-graphql-song:2020-05-28T17-31-30.1f4f5d6
+```
+
+=== The Holy Grail
+
+It is pending trying to run it using link:https://spring.io/blog/2020/04/16/spring-tips-the-graalvm-native-image-builder-feature[Graalvm].
+
+
 == Requests
 
 Some requests examples are link:./insomnia/insomnia-data.json[here]

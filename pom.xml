@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.elevenpaths.experiment</groupId>
-    <artifactId>springb-graph-song</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>springboot-graphql-song</artifactId>
+    <version>0.1.0</version>
 
     <properties>
         <!-- The main class to start by executing "java -jar" -->
@@ -16,9 +16,13 @@
         <logback-contrib.version>0.1.5</logback-contrib.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot.version>2.3.0.RELEASE</spring-boot.version>
+        <!--suppress UnresolvedMavenProperty -->
+        <version.number>${git.build.time}.${git.commit.id.abbrev}</version.number>
+        <execmavenplugin.version>1.6.0</execmavenplugin.version>
     </properties>
 
     <build>
+        <defaultGoal>spring-boot:run</defaultGoal>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -51,6 +55,65 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${execmavenplugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>docker-package</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>docker</executable>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                            <arguments>
+                                <argument>build</argument>
+                                <argument>.</argument>
+                                <argument>-t</argument>
+                                <argument>${project.artifactId}:${version.number}</argument>
+                                <argument>--build-arg</argument>
+                                <argument>JAR_FILE=${project.artifactId}-${project.version}.jar</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- https://phauer.com/2016/version-numbers-continuous-delivery-maven-docker/ -->
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>4.0.0</version>
+                <executions>
+                    <execution>
+                        <id>get-the-git-infos</id>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <dateFormat>yyyy-MM-dd'T'HH-mm-ss</dateFormat>
+                    <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+                    <generateGitPropertiesFile>false</generateGitPropertiesFile>
+                    <gitDescribe>
+                        <skip>false</skip>
+                        <always>true</always>
+                        <tags>true</tags>
+                        <forceLongFormat>true</forceLongFormat>
+                    </gitDescribe>
+                    <skipPoms>false</skipPoms>
+                    <injectAllReactorProjects>true</injectAllReactorProjects>
+                    <runOnlyOnce>true</runOnlyOnce>
+                    <includeOnlyProperties>
+                        <includeOnlyProperty>^git.build.(time|version)$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.id.(abbrev|full)$</includeOnlyProperty>
+                    </includeOnlyProperties>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -116,6 +179,16 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${spring-boot.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.javatuples</groupId>
+            <artifactId>javatuples</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.functionaljava</groupId>
+            <artifactId>functionaljava</artifactId>
+            <version>4.8.1</version>
         </dependency>
     </dependencies>
 
