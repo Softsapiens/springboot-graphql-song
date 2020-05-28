@@ -5,6 +5,8 @@ type Query {
 
     viewer: Session
 
+    dummy(d: DateTime): JSON
+
 
     search_tickets(context: JSON, filter: NFilter, limit: Int, offset: Int, sort: [NSort]): TicketSearchResult
     aggregate_tickets(context: JSON, filter: NFilter, limit: Int, offset: Int, sort: [NSort]): TicketSearchResult

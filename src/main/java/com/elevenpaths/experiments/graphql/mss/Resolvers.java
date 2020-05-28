@@ -36,9 +36,6 @@ public final class Resolvers implements Resolver {
 
             ExecutionId id = env.getExecutionId();
 
-            String context = env.getArgument("context");
-            ArrayList<String> fields = env.getArgument("fields");
-
             env.getSelectionSet().getFields().forEach(f -> {
                 log.info("ExecutionId [{}] Field [{}]", id, f.getName());
             });
