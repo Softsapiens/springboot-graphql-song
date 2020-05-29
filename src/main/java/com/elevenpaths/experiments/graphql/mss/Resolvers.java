@@ -6,6 +6,7 @@ import graphql.*;
 import graphql.execution.DataFetcherResult;
 import graphql.execution.ExecutionId;
 import graphql.schema.DataFetcher;
+import graphql.schema.PropertyDataFetcher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -43,6 +44,8 @@ public final class Resolvers implements Resolver {
             env.getArguments().entrySet().forEach(entry -> {
                 log.info("ExecutionId [{}] Argument [{}][{} => {}]", id, entry.getKey(), entry.getValue().getClass().getCanonicalName(),entry.getValue());
             });
+
+            log.info("ExecutionId [{}] auth scope [{}]", id, Optional.ofNullable(env.getFieldDefinition().getDirective("auth")).map(d -> d.getArgument("scope").getValue()).orElse("No Auth scope required"));
 
             DataFetcherResult.Builder<TicketSearchResult> r = DataFetcherResult.newResult();
 

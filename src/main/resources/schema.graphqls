@@ -8,9 +8,11 @@ type Query {
     dummy(d: DateTime): JSON
 
 
-    search_tickets(context: JSON, filter: NFilter, limit: Int, offset: Int, sort: [NSort]): TicketSearchResult
+    search_tickets(context: JSON, filter: NFilter, limit: Int, offset: Int, sort: [NSort]): TicketSearchResult @auth(scope: "mss")
     aggregate_tickets(context: JSON, filter: NFilter, limit: Int, offset: Int, sort: [NSort]): TicketSearchResult
 }
+
+directive @auth(scope: String!) on FIELD_DEFINITION
 
 type Mutation {
     createAuthor(name: String!): Author
