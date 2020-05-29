@@ -46,10 +46,8 @@ public final class Resolvers implements Resolver {
 
             DataFetcherResult.Builder<TicketSearchResult> r = DataFetcherResult.newResult();
 
-            Optional.<GraphQLContext.Builder>ofNullable(env.getContext()).ifPresentOrElse(c -> {
-                GraphQLContext contxt = c.build();
-
-                contxt.stream().forEach(e -> {
+            Optional.<GraphQLContext>ofNullable(env.getContext()).ifPresentOrElse(c -> {
+                c.stream().forEach(e -> {
                     log.info("ExecutionId [{}] Resolver context [{}][{}]", id, e.getKey(), e.getValue());
                 });
             }, () -> { log.info("ExecutionId [{}] Resolver context EMPTY"); });

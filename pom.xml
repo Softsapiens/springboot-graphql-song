@@ -10,7 +10,7 @@
     <properties>
         <!-- The main class to start by executing "java -jar" -->
         <start-class>com.elevenpaths.experiments.graphql.SongApp</start-class>
-        <graphql-java.version>7.0.1</graphql-java.version>
+        <graphql-java.version>15.0</graphql-java.version>
         <guava.version>29.0-jre</guava.version>
         <java.version>11</java.version>
         <logback-contrib.version>0.1.5</logback-contrib.version>
@@ -167,8 +167,8 @@
         </dependency>
         <dependency>
             <groupId>com.graphql-java</groupId>
-            <artifactId>graphql-java-spring-boot-starter-webflux</artifactId>
-            <version>2019-06-24T11-47-27-31ab4f9</version>
+            <artifactId>graphql-java</artifactId>
+            <version>${graphql-java.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
