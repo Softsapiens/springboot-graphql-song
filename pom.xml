@@ -10,7 +10,7 @@
     <properties>
         <!-- The main class to start by executing "java -jar" -->
         <start-class>com.elevenpaths.experiments.graphql.SongApp</start-class>
-        <graphql-java.version>15.0</graphql-java.version>
+        <graphql-java.version>17.4</graphql-java.version>
         <guava.version>29.0-jre</guava.version>
         <java.version>11</java.version>
         <logback-contrib.version>0.1.5</logback-contrib.version>
